@@ -1,0 +1,103 @@
+﻿@using asistencia.Models
+@model List<UsuariosCLS>
+
+    <table class="table table-bordered table-striped dt-responsive">
+
+        <thead>
+
+            <tr>
+
+                <th style="width:10px">#</th>
+                <th>Empleados</th>
+                <th class="text-center"># Cédula</th>
+                <th class="text-center">Perfil</th>
+                <th class="text-center">Tiempo acumulado</th>
+                <th class="text-center">Total atrasos / mes</th>
+                <th class="text-center">Acciones</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td class="text-center">@(Model.IndexOf(item) + 1)</td>
+                <td>@item.nombres</td>
+                <td class="text-center">@item.usuario</td>
+                <td class="text-center">@item.perfil</td>
+                @if (item.dia == 0)
+                {
+                    if (item.hora == 0)
+                    {
+                        if (item.min >= 0)
+                        {
+                            <td class="text-center" style="color:green">
+                                Dias: @item.dia, horas: @item.hora, minutos: @item.min
+                                <i class="glyphicon glyphicon-arrow-up"></i>
+                            </td>
+
+                        }
+                        else
+                        {
+                            <td class="text-center" style="color:red">
+                                Dias: @item.dia, horas: @item.hora, minutos: @item.min
+                                <i class="glyphicon glyphicon-arrow-down"></i>
+                            </td>
+                        }
+                    }
+                    else if (item.hora > 0)
+                    {
+                        <td class="text-center" style="color:green">
+                            Dias: @item.dia, horas: @item.hora, minutos: @item.min
+                            <i class="glyphicon glyphicon-arrow-up"></i>
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="text-center" style="color:red">
+                            Dias: @item.dia, horas: @item.hora, minutos: @item.min
+                            <i class="glyphicon glyphicon-arrow-down"></i>
+                        </td>
+                    }
+                }
+                else if (item.dia > 0)
+                {
+                    <td class="text-center" style="color:green">
+                        Dias: @item.dia, horas: @item.hora, minutos: @item.min
+                        <i class="glyphicon glyphicon-arrow-up"></i>
+                    </td>
+                }
+                else
+                {
+                    <td class="text-center" style="color:red">
+                        Dias: @item.dia, horas: @item.hora, minutos: @item.min
+                        <i class="glyphicon glyphicon-arrow-down"></i>
+                    </td>
+                }
+                <td class="text-center">@item.totalAtrasosMes</td>
+                <td class="text-center">
+
+                    <div class="btn-group">
+
+                        <button type="button" onclick="Editar(@item.idUsuario)" class="btn btn-warning glyphicon glyphicon-edit" data-toggle="modal" data-target="#modalAgregarUsuario"></button>
+
+                        <button type="button" onclick="Eliminar(@item.idUsuario)" class="btn btn-danger glyphicon glyphicon-trash"></button>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+            }
+
+
+        </tbody>
+
+    </table>
+
+
+
+    

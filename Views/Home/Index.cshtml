@@ -1,0 +1,180 @@
+﻿@model asistencia.Models.AsistenciaCLS
+@{
+    ViewBag.Title = "Asistencia";
+}
+    
+
+<!--=====================================
+ASISTENCIA
+======================================-->
+<!-- content-wrapper -->
+<div class="content-wrapper">
+
+    <!-- content-header -->
+    <section class="content-header">
+
+        <h1>
+            REGISTRO DE ASISTENCIA
+        </h1>
+
+        <ol class="breadcrumb">
+
+            <li><i class="glyphicon glyphicon-calendar"></i> @Session["fechaActual"]</li>
+
+        </ol>
+
+    </section>
+    <!-- content-body -->
+    <section class="content">
+        <!--=====================================
+        REGISTRO HORA INGRESO
+        ======================================-->
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <br />
+
+                @using (Ajax.BeginForm("IngresoHora", new AjaxOptions
+                {
+
+                    HttpMethod = "POST", // método de envio
+                    OnSuccess = "RespuestaHoraIngreso" // nombre de la function donde retorna la respeusta
+
+                }))
+                {
+                    <div class="form-inline">
+                        <div class="form-group mb-2">
+
+                            @if (Model.horaIngreso.ToString() == "00:00:00")
+                            {
+                                <button type="submit" class="btn btn-success btn-lg mb-2" id="botonHoraIngreso" style="width: 150px;">
+                                    <i class="fa fa-sign-in"></i>
+                                    <span>INGRESO</span>
+                                </button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-default btn-lg mb-2" id="botonHoraIngreso" disabled style="width: 150px;">
+                                    <i class="fa fa-sign-in"></i>
+                                    <span>INGRESO</span>
+                                </button>
+                            }
+                        </div>
+                        <div class="form-group mx-sm-3 mb-2">
+                            @Html.TextBoxFor(p => p.horaIngreso, null, new { @readonly = true, @style = "text-align: center; font-size: 22pt;", @id = "ingreso" })
+                        </div>
+                    </div>
+                }
+
+                <hr />
+
+                <!--=====================================
+                REGISTRO HORA SALIDA
+                ======================================-->
+
+
+                @using (Ajax.BeginForm("SalidaHora", new AjaxOptions
+                {
+
+                    HttpMethod = "POST", // método de envio
+                    OnSuccess = "RespuestaHoraSalida" // nombre de la function donde retorna la respeusta
+
+                }))
+                {
+                    <div class="form-inline">
+                        <div class="form-group mb-2">
+
+                            @if (Model.horaIngreso.ToString() == "00:00:00" || Model.horaSalida.ToString() != "00:00:00")
+                            {
+                                <button class="btn btn-default btn-lg mb-2" id="botonHoraSalir" disabled style="width: 150px;">
+                                    <i class="fa fa-sign-out"></i>
+                                    <span>SALIDA</span>
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-danger btn-lg mb-2" id="botonHoraSalir" style="width: 150px;">
+                                    <i class="fa fa-sign-out"></i>
+                                    <span>SALIDA</span>
+                                </button>
+                            }
+                        </div>
+                        <div class="form-group mx-sm-3 mb-2">
+                            @Html.TextBoxFor(p => p.horaSalida, null, new { @readonly = true, @style = "text-align: center; font-size: 22pt;", @id = "salida" })
+                        </div>
+                    </div>
+                }
+                <br />
+                <br />
+            </div>
+
+            <!--=====================================
+            REGISTRO JUSTIFICACIÓN
+            ======================================-->
+            <div class="col-md-6">
+
+
+                @using (Ajax.BeginForm("justificar", new AjaxOptions
+                {
+
+                    HttpMethod = "POST", // método de envio
+                    OnSuccess = "RespuestaJustificar", // nombre de la function donde retorna la respeusta
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "divError"
+                }))
+                {
+                    <div class="form-group row">
+                        <div class="form-group">
+                            <label for="fechaJustificar">Justificar <small>(En caso de no poder presentarse)</small></label>
+                            <br>
+                            @Html.EditorFor(p => p.fechaJustificar, new { htmlAttributes = new { @class = "form-control ", @required = "true", @Value=Session["fechaActual"], @max=Session["fechaActual"], @min="2020-01-15" } })
+                            @Html.ValidationMessage("fechaJustificar", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            @Html.TextAreaFor(p => p.justificar, new { @row = 10, @class = "form-control", @placeholder = "Escriba aquí su justificación...", @required = "true" })
+                            @Html.ValidationMessage("justificar", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-warning btn-block" style="width: 150px;">
+                                <span>ENVIAR</span>
+                            </button>
+                        </div>
+                    </div>
+                    <br />
+                    <div id="divError"></div>
+                }
+
+            </div>
+        </div>
+    </section>
+
+
+</div>
+<!-- content-wrapper -->
+
+<script>
+    function RespuestaHoraIngreso(respuesta) {
+        document.getElementById("ingreso").value = respuesta;
+        $("#botonHoraIngreso").prop("disabled", true);
+        $("#botonHoraIngreso").removeClass("btn-success");
+        $("#botonHoraIngreso").addClass("btn-default");
+        $("#botonHoraSalir").prop("disabled", false);
+        $("#botonHoraSalir").removeClass("btn-default");
+        $("#botonHoraSalir").addClass("btn-danger");
+    }
+    function RespuestaHoraSalida(respuesta) {
+        document.getElementById("salida").value = respuesta;
+        $("#botonHoraSalir").prop("disabled", true);
+        $("#botonHoraSalir").removeClass("btn-danger");
+        $("#botonHoraSalir").addClass("btn-default");
+    }
+    function RespuestaJustificar(respuesta) {
+        if (respuesta == 1) {
+            alert("Justificación realizada correctamente!");
+        } else {
+            alert("Problemas al realizar la justificación");
+        }
+    }
+</script>

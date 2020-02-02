@@ -1,0 +1,53 @@
+<Schema Namespace="asistenciaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="asistencia">
+    <Key>
+      <PropertyRef Name="ASI_ID" />
+    </Key>
+    <Property Name="ASI_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="USU_ID" Type="int" Nullable="false" />
+    <Property Name="ASI_FECHA" Type="date" Nullable="false" />
+    <Property Name="ASI_HORA_INGRESO" Type="time" Precision="7" Nullable="false" />
+    <Property Name="ASI_HORA_SALIDA" Type="time" Precision="7" Nullable="false" />
+    <Property Name="ASI_ESTADO" Type="int" />
+    <Property Name="ASI_OBSERVACION" Type="text" />
+    <Property Name="ASI_ATRASO" Type="int" />
+  </EntityType>
+  <EntityType Name="usuarios">
+    <Key>
+      <PropertyRef Name="USU_ID" />
+    </Key>
+    <Property Name="USU_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="USU_NOMBRES" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="USU_USUARIO" Type="varchar" MaxLength="14" Nullable="false" />
+    <Property Name="USU_PASSWORD" Type="varchar" MaxLength="500" Nullable="false" />
+    <Property Name="USU_PERFIL" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="USU_ESTADO" Type="int" />
+    <Property Name="USU_FECHA" Type="datetime" />
+    <Property Name="USU_DIA" Type="int" />
+    <Property Name="USU_HORA" Type="int" />
+    <Property Name="USU_MIN" Type="int" />
+    <Property Name="USU_TOTAL_ATRASOS_MES" Type="int" />
+  </EntityType>
+  <Association Name="FK_USU_ID">
+    <End Role="usuarios" Type="Self.usuarios" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="asistencia" Type="Self.asistencia" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuarios">
+        <PropertyRef Name="USU_ID" />
+      </Principal>
+      <Dependent Role="asistencia">
+        <PropertyRef Name="USU_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="asistenciaModelStoreContainer">
+    <EntitySet Name="asistencia" EntityType="Self.asistencia" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="usuarios" EntityType="Self.usuarios" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_USU_ID" Association="Self.FK_USU_ID">
+      <End Role="usuarios" EntitySet="usuarios" />
+      <End Role="asistencia" EntitySet="asistencia" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,35 @@
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="asistenciaModelStoreContainer" CdmEntityContainer="asistenciaEntities">
+    <EntitySetMapping Name="asistencia">
+      <EntityTypeMapping TypeName="asistenciaModel.asistencia">
+        <MappingFragment StoreEntitySet="asistencia">
+          <ScalarProperty Name="ASI_ID" ColumnName="ASI_ID" />
+          <ScalarProperty Name="USU_ID" ColumnName="USU_ID" />
+          <ScalarProperty Name="ASI_FECHA" ColumnName="ASI_FECHA" />
+          <ScalarProperty Name="ASI_HORA_INGRESO" ColumnName="ASI_HORA_INGRESO" />
+          <ScalarProperty Name="ASI_HORA_SALIDA" ColumnName="ASI_HORA_SALIDA" />
+          <ScalarProperty Name="ASI_ESTADO" ColumnName="ASI_ESTADO" />
+          <ScalarProperty Name="ASI_OBSERVACION" ColumnName="ASI_OBSERVACION" />
+          <ScalarProperty Name="ASI_ATRASO" ColumnName="ASI_ATRASO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="usuarios">
+      <EntityTypeMapping TypeName="asistenciaModel.usuarios">
+        <MappingFragment StoreEntitySet="usuarios">
+          <ScalarProperty Name="USU_ID" ColumnName="USU_ID" />
+          <ScalarProperty Name="USU_NOMBRES" ColumnName="USU_NOMBRES" />
+          <ScalarProperty Name="USU_USUARIO" ColumnName="USU_USUARIO" />
+          <ScalarProperty Name="USU_PASSWORD" ColumnName="USU_PASSWORD" />
+          <ScalarProperty Name="USU_PERFIL" ColumnName="USU_PERFIL" />
+          <ScalarProperty Name="USU_ESTADO" ColumnName="USU_ESTADO" />
+          <ScalarProperty Name="USU_FECHA" ColumnName="USU_FECHA" />
+          <ScalarProperty Name="USU_DIA" ColumnName="USU_DIA" />
+          <ScalarProperty Name="USU_HORA" ColumnName="USU_HORA" />
+          <ScalarProperty Name="USU_MIN" ColumnName="USU_MIN" />
+          <ScalarProperty Name="USU_TOTAL_ATRASOS_MES" ColumnName="USU_TOTAL_ATRASOS_MES" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

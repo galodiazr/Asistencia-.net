@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="asistenciaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="asistencia">
+          <Key>
+            <PropertyRef Name="ASI_ID" />
+          </Key>
+          <Property Name="ASI_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="USU_ID" Type="int" Nullable="false" />
+          <Property Name="ASI_FECHA" Type="date" Nullable="false" />
+          <Property Name="ASI_HORA_INGRESO" Type="time" Precision="7" Nullable="false" />
+          <Property Name="ASI_HORA_SALIDA" Type="time" Precision="7" Nullable="false" />
+          <Property Name="ASI_ESTADO" Type="int" />
+          <Property Name="ASI_OBSERVACION" Type="text" />
+          <Property Name="ASI_ATRASO" Type="int" />
+        </EntityType>
+        <EntityType Name="usuarios">
+          <Key>
+            <PropertyRef Name="USU_ID" />
+          </Key>
+          <Property Name="USU_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="USU_NOMBRES" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="USU_USUARIO" Type="varchar" MaxLength="14" Nullable="false" />
+          <Property Name="USU_PASSWORD" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="USU_PERFIL" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="USU_ESTADO" Type="int" />
+          <Property Name="USU_FECHA" Type="datetime" />
+          <Property Name="USU_DIA" Type="int" />
+          <Property Name="USU_HORA" Type="int" />
+          <Property Name="USU_MIN" Type="int" />
+          <Property Name="USU_TOTAL_ATRASOS_MES" Type="int" />
+        </EntityType>
+        <Association Name="FK_USU_ID">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="asistencia" Type="Self.asistencia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="USU_ID" />
+            </Principal>
+            <Dependent Role="asistencia">
+              <PropertyRef Name="USU_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="asistenciaModelStoreContainer">
+          <EntitySet Name="asistencia" EntityType="Self.asistencia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="usuarios" EntityType="Self.usuarios" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_USU_ID" Association="Self.FK_USU_ID">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="asistencia" EntitySet="asistencia" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="asistenciaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="asistencia">
+          <Key>
+            <PropertyRef Name="ASI_ID" />
+          </Key>
+          <Property Name="ASI_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="USU_ID" Type="Int32" Nullable="false" />
+          <Property Name="ASI_FECHA" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ASI_HORA_INGRESO" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="ASI_HORA_SALIDA" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="ASI_ESTADO" Type="Int32" />
+          <Property Name="ASI_OBSERVACION" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ASI_ATRASO" Type="Int32" />
+          <NavigationProperty Name="usuarios" Relationship="Self.FK_USU_ID" FromRole="asistencia" ToRole="usuarios" />
+        </EntityType>
+        <EntityType Name="usuarios">
+          <Key>
+            <PropertyRef Name="USU_ID" />
+          </Key>
+          <Property Name="USU_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="USU_NOMBRES" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="USU_USUARIO" Type="String" MaxLength="14" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="USU_PASSWORD" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="USU_PERFIL" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="USU_ESTADO" Type="Int32" />
+          <Property Name="USU_FECHA" Type="DateTime" Precision="3" />
+          <Property Name="USU_DIA" Type="Int32" />
+          <Property Name="USU_HORA" Type="Int32" />
+          <Property Name="USU_MIN" Type="Int32" />
+          <Property Name="USU_TOTAL_ATRASOS_MES" Type="Int32" />
+          <NavigationProperty Name="asistencia" Relationship="Self.FK_USU_ID" FromRole="usuarios" ToRole="asistencia" />
+        </EntityType>
+        <Association Name="FK_USU_ID">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="asistencia" Type="Self.asistencia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="USU_ID" />
+            </Principal>
+            <Dependent Role="asistencia">
+              <PropertyRef Name="USU_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="asistenciaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="asistencia" EntityType="Self.asistencia" />
+          <EntitySet Name="usuarios" EntityType="Self.usuarios" />
+          <AssociationSet Name="FK_USU_ID" Association="Self.FK_USU_ID">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="asistencia" EntitySet="asistencia" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="asistenciaModelStoreContainer" CdmEntityContainer="asistenciaEntities">
+          <EntitySetMapping Name="asistencia">
+            <EntityTypeMapping TypeName="asistenciaModel.asistencia">
+              <MappingFragment StoreEntitySet="asistencia">
+                <ScalarProperty Name="ASI_ID" ColumnName="ASI_ID" />
+                <ScalarProperty Name="USU_ID" ColumnName="USU_ID" />
+                <ScalarProperty Name="ASI_FECHA" ColumnName="ASI_FECHA" />
+                <ScalarProperty Name="ASI_HORA_INGRESO" ColumnName="ASI_HORA_INGRESO" />
+                <ScalarProperty Name="ASI_HORA_SALIDA" ColumnName="ASI_HORA_SALIDA" />
+                <ScalarProperty Name="ASI_ESTADO" ColumnName="ASI_ESTADO" />
+                <ScalarProperty Name="ASI_OBSERVACION" ColumnName="ASI_OBSERVACION" />
+                <ScalarProperty Name="ASI_ATRASO" ColumnName="ASI_ATRASO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="usuarios">
+            <EntityTypeMapping TypeName="asistenciaModel.usuarios">
+              <MappingFragment StoreEntitySet="usuarios">
+                <ScalarProperty Name="USU_ID" ColumnName="USU_ID" />
+                <ScalarProperty Name="USU_NOMBRES" ColumnName="USU_NOMBRES" />
+                <ScalarProperty Name="USU_USUARIO" ColumnName="USU_USUARIO" />
+                <ScalarProperty Name="USU_PASSWORD" ColumnName="USU_PASSWORD" />
+                <ScalarProperty Name="USU_PERFIL" ColumnName="USU_PERFIL" />
+                <ScalarProperty Name="USU_ESTADO" ColumnName="USU_ESTADO" />
+                <ScalarProperty Name="USU_FECHA" ColumnName="USU_FECHA" />
+                <ScalarProperty Name="USU_DIA" ColumnName="USU_DIA" />
+                <ScalarProperty Name="USU_HORA" ColumnName="USU_HORA" />
+                <ScalarProperty Name="USU_MIN" ColumnName="USU_MIN" />
+                <ScalarProperty Name="USU_TOTAL_ATRASOS_MES" ColumnName="USU_TOTAL_ATRASOS_MES" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,271 @@
+﻿@using asistencia.Models
+@model List<UsuariosCLS>
+
+@{
+    ViewBag.Title = "Usuarios";
+
+    List<SelectListItem> listaPerfil = (List<SelectListItem>)ViewBag.listaPerfil;
+}
+
+    <div class="content-wrapper">
+
+        <section class="content-header">
+
+            <h1>
+
+                Control de empleados - Mes @Session["nombreMes"]
+
+            </h1>
+
+
+        </section>
+
+        <hr />
+
+    </div>
+
+
+<section class="content">
+
+    <div class="box">
+
+        <div class="box-header with-border">
+
+            <button onclick="Agregar()" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modalAgregarUsuario">
+
+                Agrear Empleado
+
+            </button>
+
+        </div>
+        <br />
+
+        <div class="box-body">
+
+            @using (Ajax.BeginForm("Filtrar", "", new AjaxOptions
+            {
+                HttpMethod = "POST",
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "divUsuario"
+                
+
+            }, new { @id = "frmFiltro" }))
+            {
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="input-group mb-3">
+                            <div class="input-group">
+                                @Html.TextBox("termino", null, new { @class = "form-control", @placeholder = "Buscar" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="divUsuario">
+                    @Html.Partial("_tablaUsuarios", Model)
+                </div>
+
+            }
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!--=====================================
+MODAL AGREGAR INSTRUCTOR
+======================================-->
+
+<div id="modalAgregarUsuario" class="modal fade" role="dialog">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <!--=====================================
+    CABEZA DEL MODAL
+    ======================================-->
+
+            <div class="modal-header" style="background:#3c8dbc; color:white">
+
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                <h4 class="modal-title">Agregar Empleado</h4>
+
+            </div>
+
+            @using (Ajax.BeginForm("Guardar", "Usuario", null, new AjaxOptions
+            {
+                HttpMethod = "Post",
+                OnSuccess = "Guardar",
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "divError"
+            }))
+            {
+                <!--=====================================
+                CUERPO DEL MODAL
+                ======================================-->
+                @Html.Hidden("titulo")
+
+                <div class="modal-body">
+
+                    <div class="box-body">
+
+                        <!-- ENTRADA PARA EL USUARIO / CEDULA-->
+
+                        <div class="form-group">
+
+                            <div class="input-group">
+
+                                <span class="input-group-addon glyphicon glyphicon-credit-card"></span>
+
+                                @Html.TextBox("usuario", null, new { @class = "form-control", @placeholder = "No CÉDULA", @required = true, @readonly=true, @type="number" })
+                            </div>
+
+                        </div>
+
+                        <!-- ENTRADA PARA EL EMPLEADO -->
+
+                        <div class="form-group">
+
+                            <div class="input-group">
+
+                                <span class="input-group-addon glyphicon glyphicon-user"></span>
+
+                                @Html.TextBox("nombres", null, new { @class = "form-control cambios", @placeholder = "NOMBRE EMPLEADO", @pattern = "[A-Za-zñÑáéíóúÁÉÍÓÚ ]+", @title = "Sin números y sin caracteres especiales", @required = true })
+                            </div>
+
+                        </div>
+
+
+                        <!-- ENTRADA PARA PASSWORD -->
+
+                        <div class="form-group">
+
+                            <div class="input-group">
+
+                                <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                               
+                                    @Html.TextBox("password", null, new { type = "password", @class = "form-control cambios", @placeholder = "********" })
+
+                            </div>
+
+                        </div>
+
+                        <!-- ENTRADA PARA SELECCIONAR PERFIL -->
+
+                        <div class="form-group">
+
+                            <div class="input-group">
+
+                                <span class="input-group-addon"><i class="fa fa-users"></i></span>
+
+                                @*@Html.DropDownList("perfil", listaPerfil, null, new { @class = "form-control" })*@
+
+                                <select class="form-control input-lg cambios" name="perfil" id="select">
+
+                                    <option value="">Selecionar perfil</option>
+
+                                    <option value="Administrador">Administrador</option>
+
+                                    <option value="Empleado">Empleado</option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!--=====================================
+                PIE DEL MODAL
+                ======================================-->
+
+                <div class="modal-footer">
+
+                    <button type="button" id="btnClose" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
+
+                    <button type="submit" class="btn btn-primary" id="botonEmergenteGuardar">Guardar</button>
+
+                </div>
+
+                <div id="divError"></div>
+
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+
+    function Limpiar() {
+        var controles = document.getElementsByClassName("form-control");
+        for (var i = 0; i < controles.length; i++) {
+            controles[i].value = "";
+        }
+        document.getElementById("divError").innerHTML = "";
+    }
+
+    var termino = document.getElementById("termino");
+    termino.onkeyup = function () {
+        $("#frmFiltro").trigger("submit");
+    }
+
+    function Agregar() {
+        Limpiar();
+        document.getElementById("titulo").value = -1;
+        $("#usuario").removeAttr("readonly");
+        $("#password").prop("required",true);
+    }
+
+    function Guardar(rpta) {
+        if (rpta == "1") {
+            $("#frmFiltro").trigger("submit");
+            alert("Se ejecuto correctamente");
+            Limpiar();
+            document.getElementById("btnClose").click();
+        } else {
+            alert("Ocurrio un erro o no se ha realizado cambios");
+        }
+    }
+
+    function Editar(id) {
+        Limpiar();
+        document.getElementById("titulo").value = id;
+        $.get("http://localhost:10056/Usuario/recuperarDatos/?titulo=" + id, function (data) {
+            document.getElementById("usuario").value = data.usuario;
+            document.getElementById("nombres").value = data.nombres;
+            document.getElementById("select").value = data.perfil;
+            $("#password").prop("required",false);
+        });
+    }
+
+    function Eliminar(id) {
+        document.getElementById("titulo").value = id;
+        $.get("http://localhost:10056/Usuario/eliminar/?titulo=" + id, function (data) {
+            if (data == null) {
+                alert("Ha ocurrido un error");
+            } else {
+                alert("Eliminado correctamente!");
+                $("#frmFiltro").trigger("submit");
+            }
+        });
+    }
+
+    //función cuando hacen cambios en los input
+    var cambiosInput = document.getElementsByClassName("cambios");
+    cambiosInput.onchange = function () {
+        alert("prueba");
+    }
+
+</script>

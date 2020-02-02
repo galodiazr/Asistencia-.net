@@ -1,0 +1,149 @@
+﻿@using asistencia.Models
+@model List<AsistenciaCLS>
+
+@{
+    ViewBag.Title = "Asistencia";
+}
+
+
+<div class="content-wrapper">
+
+    <section class="content-header">
+
+        <h1>
+
+            HISTORIAL ASISTENCIA
+
+        </h1>
+
+    </section>
+
+    <hr />
+
+</div>
+
+
+<section class="content">
+
+    <div class="box">
+
+        <br />
+        <div class="box-body">
+
+            @using (Ajax.BeginForm("Filtrar", "", new AjaxOptions
+            {
+                HttpMethod = "POST",
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "divUsuario"
+
+
+            }, new { @id = "frmFiltro" }))
+            {
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="input-group mb-3">
+                            <div class="input-group">
+                                @Html.TextBox("termino", null, new { @class = "form-control", @placeholder = "Buscar" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="divUsuario">
+                    @Html.Partial("_tablaAsistencia", Model)
+                </div>
+
+            }
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!--=====================================
+MODAL EDITAR JUSTIFICACIÓN
+======================================-->
+
+<div id="modalEditarJustificacion" class="modal fade" role="dialog">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <!--=====================================
+            CABEZA DEL MODAL
+            ======================================-->
+
+            <div class="modal-header" style="background:#3c8dbc; color:white">
+
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                <h4 class="modal-title">Justificación</h4>
+
+            </div>
+
+            @using (Ajax.BeginForm("Justificar", "Asistencia", null, new AjaxOptions
+            {
+                HttpMethod = "Post",
+                OnSuccess = "Justificar",
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "divError"
+            }))
+            {
+                <!--=====================================
+                CUERPO DEL MODAL
+                ======================================-->
+                @Html.Hidden("titulo")
+
+                <div class="modal-body">
+
+                        <!-- ENTRADA PARA JUSTIFICACIÓN -->
+
+                    <div class="input-group">
+
+                        @Html.TextArea("observacion","observacion",5,200, new {@required = true, style="width: 500px;"})
+                    </div>            
+
+                </div>
+
+                <!--=====================================
+                PIE DEL MODAL
+                ======================================-->
+
+                <div class="modal-footer">
+
+                    <button type="button" id="btnClose" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
+
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+
+                </div>
+
+                <div id="divError"></div>
+
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script>
+    var termino = document.getElementById("termino");
+    termino.onkeyup = function () {
+        $("#frmFiltro").trigger("submit");
+    }
+
+    function Justificar(id) {
+        document.getElementById("titulo").value = id;
+        $.get("http://localhost:10056/Asistencia/recuperarDatos/?id=" + id, function (data) {
+            document.getElementById("observacion").value = data.observacion;
+        });
+    }
+
+
+</script>
